@@ -1,0 +1,25 @@
+.search-bar-container {
+  width: fit-content;
+  margin: 0 auto;
+}
+.search-bar-container input, .search-butt {
+  display: block;
+  margin: 6vh auto;
+}
+
+.search-bar-container input {
+  width: 200px;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+}
+
+.search-butt {
+  font-weight: bold;
+  color: white;
+  background-color: darkblue;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

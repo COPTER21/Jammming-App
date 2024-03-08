@@ -1,0 +1,31 @@
+.results-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.results-cards {
+  border-bottom: 1px solid white;
+  margin-bottom: 10px;
+}
+
+.detail-container {
+  display: flex;
+}
+
+.authorWithSong {
+  flex: 2;
+  text-align: center;
+}
+
+.add-butt {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+}
+
+.addSymbol {
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}

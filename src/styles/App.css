@@ -1,0 +1,30 @@
+.App {
+  background: linear-gradient(180deg,rgba(25, 25, 112, 0.8), rgba(173, 216, 230, 0.7)),
+    url("../assets/stretched-1920-1080-598673.jpg"), no-repeat;
+  background-size: cover;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: auto;
+}
+
+nav {
+  background-color: darkblue;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 6vh;
+  z-index: 100;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  background-color: darkblue;
+  padding-top: 4vh;
+  padding-bottom: 2vh;
+}
+
+.sp-text {
+  color: rgb(62, 180, 220);
+}
