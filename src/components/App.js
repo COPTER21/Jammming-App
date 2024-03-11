@@ -3,22 +3,39 @@ import "../styles/App.css";
 import Playlist from "./Playlist";
 import SearchBar from "./SearchBar";
 import SearchResults from "./SearchResults";
-import Spotify from "./Spotify";
+import Spotify from "../service/Spotify";
+
+import { searchTracksOnSpotify } from "../service/Service";
 
 function App() {
-  Spotify.getAccessToken();
+  // initiate data
+  const getAccessToken = () => {
+    Spotify.getAccessToken();
+  };
+  useEffect(() => {
+    getAccessToken();
+  }, []);
 
   // track,addedPlaylist
   const [tracks, setTracks] = useState([]);
-  const [addedPlaylist, setAddedPlaylist] = useState([]);
 
-  useEffect(() => {
-    fetch("/data.json")
-      .then((response) => response.json())
-      .then((data) => setTracks(data.tracks))
-      .catch((error) => console.log("Error fetching tracks:", error));
-    
-  }, []);
+  const searchTracks = async (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() !== "") {
+      const result = await searchTracksOnSpotify(searchTerm);
+      setTracks(result);
+    }
+  };
+
+
+  // search
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearchInput = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // add playlist
+  const [addedPlaylist, setAddedPlaylist] = useState([]);
 
   const addToPlaylist = (track) => {
     const isExisted = addedPlaylist.some((v) => v.id === track.id);
@@ -30,58 +47,20 @@ function App() {
     setAddedPlaylist(newAddedPlaylist);
   };
 
-  // search
-  const [searchResults, setSearchResults] = useState([]);
-
-  const handleSearchSubmit = (results) => {
-    setSearchResults([]);
-    setSearchResults(results);
-  };
-
   // playlist
   const [playlistName, setPlaylistName] = useState("New Playlists");
-  const [playlistrecord, setPlaylistrecord] = useState();
 
   const playlistNameHandler = (e) => {
     setPlaylistName(e.target.value);
   };
-  const addPlaylistObjWithArray = (playlistName, addedPlaylist) => {
-    const uriTrack = addedPlaylist.map((obj) => obj.uri);
-    let obj = {
-      id: Math.random(),
-      playlistName,
-      addedPlaylist: uriTrack,
-    };
-    setPlaylistrecord(obj);
-  };
 
+
+  // on submit
   const createPlaylist = (e) => {
     e.preventDefault();
-    // console.log(`add-length:`, addedPlaylist.length);
-    if (addedPlaylist.length > 0) {
-      addPlaylistObjWithArray(playlistName, addedPlaylist);
-      setAddedPlaylist([]);
-      setPlaylistName("New Playlists");
-    } else {
-      console.log("Play list is Empty");
-    }
+    console.log(`addedPlaylist:`, addedPlaylist);
+    console.log(`playlistName:`, playlistName);
   };
-
-  //--------
-  const handleKeyDown = (event) => {
-    const { name, value } = event.target;
-    if (name.trim() !== "") {
-      if (name in playlistrecord) {
-        setPlaylistrecord({ ...playlistrecord, [name]: value });
-      } else {
-        console.log(`${name} does not exist in the object.`);
-      }
-    }
-  };
-  useEffect(() => {
-    setPlaylistrecord(playlistrecord);
-    setPlaylistName(playlistName);
-  }, [playlistrecord, playlistName]);
 
   return (
     <div className="App">
@@ -89,19 +68,18 @@ function App() {
       <h1>
         Ja<span className="sp-text">mmm</span>ing
       </h1>
-      <SearchBar tracks={tracks} handleSearchSubmit={handleSearchSubmit} />
-      <SearchResults
-        searchResults={searchResults}
-        addToPlaylist={addToPlaylist}
+      <SearchBar
+        searchTerm={searchTerm}
+        searchTracks={searchTracks}
+        handleSearchInput={handleSearchInput}
       />
+      <SearchResults tracks={tracks} addToPlaylist={addToPlaylist} />
       <Playlist
         playlist={addedPlaylist}
         playlistName={playlistName}
         playlistNameHandler={playlistNameHandler}
         createPlaylist={createPlaylist}
         removeTrack={removeTrack}
-        playlistrecord={playlistrecord}
-        handleKeyDown={handleKeyDown}
       />
     </div>
   );

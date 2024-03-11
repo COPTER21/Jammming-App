@@ -8,8 +8,6 @@ const Playlist = ({
   playlistNameHandler,
   createPlaylist,
   removeTrack,
-  playlistrecord,
-  handleKeyDown,
 }) => {
   return (
     <div className="playlist">
@@ -32,21 +30,6 @@ const Playlist = ({
           ))}
 
           <button className="save-butt">SAVE TO SPOTIFY</button>
-
-          {playlistrecord !== undefined && (
-            <div>
-              <div key={playlistrecord.id}>
-                <input
-                  type="text"
-                  name="playlistName"
-                  defaultValue={playlistrecord.playlistName}
-                  onChange={(event) => handleKeyDown(event)}
-                />
-              </div>
-              <h3>Modified Object:</h3>
-              <pre>{JSON.stringify(playlistrecord, null, 2)}</pre>
-            </div>
-          )}
         </div>
       </form>
     </div>
