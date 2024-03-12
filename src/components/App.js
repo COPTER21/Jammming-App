@@ -5,13 +5,22 @@ import SearchBar from "./SearchBar";
 import SearchResults from "./SearchResults";
 import Spotify from "../service/Spotify";
 
-import { searchTracksOnSpotify } from "../service/Service";
+import {
+  searchTracksOnSpotify,
+  createPlaylistInSpotify,
+  getUserID,
+  addToPlaylistInSpotify,
+} from "../service/Service";
 
 function App() {
   // initiate data
+  // let userID;
   const getAccessToken = () => {
     Spotify.getAccessToken();
   };
+  // const getUserIDfor = () => {
+  //   getUserID();
+  // }
   useEffect(() => {
     getAccessToken();
   }, []);
@@ -27,11 +36,11 @@ function App() {
     }
   };
 
-
   // search
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchInput = (e) => {
     setSearchTerm(e.target.value);
+    // setSearchTerm("");
   };
 
   // add playlist
@@ -54,12 +63,33 @@ function App() {
     setPlaylistName(e.target.value);
   };
 
-
   // on submit
-  const createPlaylist = (e) => {
+  const createPlaylist = async (e) => {
     e.preventDefault();
-    console.log(`addedPlaylist:`, addedPlaylist);
-    console.log(`playlistName:`, playlistName);
+    console.log(
+      `addedPlaylist:`,
+      addedPlaylist.map((v) => v.uri)
+    );
+
+    // body for create playlist request
+    const req = {
+      name: playlistName,
+      description: "New playlist description",
+      public: false,
+    };
+    const userId = await getUserID();
+
+    const playlist_id = await createPlaylistInSpotify(req, userId);
+    // console.log(`id: ${playlist_id},name: ${playlistName}, userid: ${userId}}`);
+
+    // body for add request
+    const reqForAdd = {
+      uris: addedPlaylist.map((v)=> v.uri),
+      position: 0,
+    };
+
+    addToPlaylistInSpotify(playlist_id, reqForAdd);
+
   };
 
   return (

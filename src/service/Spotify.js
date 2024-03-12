@@ -29,8 +29,9 @@ const Spotify = {
       const authEndpoint = "https://accounts.spotify.com/authorize";
       const clientId = "a1f83e0eadde413e8107bf9d869e97ca";
       const redirectUri = "http://localhost:3000";
+      const scope = 'playlist-modify-private user-read-private user-read-email'
 
-      window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token`;
+      window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=token`;
     }
   },
 
